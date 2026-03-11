@@ -1,0 +1,17 @@
+{
+  "name": "express-speed",
+  "version": "2.0.0",
+  "main": "index.js",
+  "type": "module",
+  "files": [
+    "src",
+    "index.js",
+    "app.js"
+  ],
+  "dependencies": {
+    "express": "^4.22.1",
+    "express-speed": "^2.0.0",
+    "fs-extra": "^11.3.3",
+    "glob": "^10.5.0"
+  }
+}
