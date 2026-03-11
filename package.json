@@ -1,5 +1,6 @@
 {
   "name": "express-speed",
+  "description": "A simple pager system for Express apps",
   "version": "2.0.0",
   "main": "index.js",
   "type": "module",
@@ -8,6 +9,12 @@
     "index.js",
     "app.js"
   ],
+  "author": "f10tme",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/f10tme/express-speed"
+  },
   "dependencies": {
     "express": "^4.22.1",
     "express-speed": "^2.0.0",
