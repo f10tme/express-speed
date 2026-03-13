@@ -1,7 +1,7 @@
 {
   "name": "express-speed",
   "description": "A simple pager system for Express apps",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "main": "index.js",
   "type": "module",
   "files": [
