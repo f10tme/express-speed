@@ -1,19 +1,19 @@
 # express-speed
 
-`express-speed` is a lightweight pager system that makes route creation in Express applications more organized and chainable.
+`express-speed`, Express uygulamalarında route oluşturmayı daha düzenli ve zincirleme (chainable) hale getiren basit bir pager sistemidir.
 
-> 🇹🇷 Türkçe dokümantasyon için [TR.md](./TR.md) dosyasına göz atın.
+> 🇬🇧 For English documentation, see [README.md](./README.md).
 
-## Goals
+## Amaç
 
-- Simplify route definitions
-- Make pages modular
-- Ease middleware and role-based access control
-- Manage both API and page routes within the same structure
+- Route tanımlamayı sadeleştirmek
+- Sayfaları modüler hale getirmek
+- Middleware ve rol kontrolünü kolaylaştırmak
+- API ve sayfa route'larını aynı yapı içinde yönetmek
 
 ---
 
-## Installation
+## Kurulum
 
 ```bash
 npm install express-speed
@@ -21,9 +21,9 @@ npm install express-speed
 
 ---
 
-## Basic Usage
+## Temel Kullanım
 
-Creating a simple page:
+Basit bir sayfa oluşturma:
 
 ```js
 import { pager } from "express-speed";
@@ -41,9 +41,9 @@ export default page;
 
 ---
 
-## Multiple GET Handlers
+## Birden Fazla GET Handler
 
-You can define multiple handlers for the same route.
+Aynı route içinde birden fazla handler tanımlayabilirsin.
 
 ```js
 import { pager } from "express-speed";
@@ -60,13 +60,13 @@ export default pager
   .build();
 ```
 
-This pattern works in line with Express middleware logic.
+Bu yapı Express middleware mantığıyla çalışır.
 
 ---
 
-## Sub Path Routes
+## Alt Yol Route'ları
 
-Use `get(path, handler)` to create different endpoints within the same pager.
+`get(path, handler)` kullanarak aynı pager içinde farklı endpointler oluşturabilirsin.
 
 ```js
 import { pager } from "express-speed";
@@ -89,7 +89,7 @@ export default pager
   .build();
 ```
 
-Generated routes:
+Oluşan route'lar:
 
 ```
 /blog
@@ -99,9 +99,9 @@ Generated routes:
 
 ---
 
-## Middleware Usage
+## Middleware Kullanımı
 
-You can add middleware inside a pager.
+Pager içine middleware ekleyebilirsin.
 
 ```js
 import { pager } from "express-speed";
@@ -122,9 +122,9 @@ export default pager
 
 ---
 
-## Role Based Access
+## Rol Tabanlı Erişim
 
-Restrict page access using roles.
+Role kullanarak sayfaya erişimi sınırlandırabilirsin.
 
 ```js
 import { pager } from "express-speed";
@@ -140,9 +140,9 @@ export default pager
 
 ---
 
-## API Endpoint Example
+## API Endpoint Örneği
 
-Pager can also be used for API endpoints.
+Pager, API endpointleri için de kullanılabilir.
 
 ```js
 import { pager } from "express-speed";
@@ -160,17 +160,17 @@ export default pager
 
 ---
 
-## GraphQL Integration
+## GraphQL Entegrasyonu
 
-`express-speed` also supports GraphQL endpoints.
+`express-speed`, GraphQL endpointlerini de destekler.
 
-The following packages must be installed in your project:
+Bunun için projende şu paketler kurulu olmalıdır:
 
 ```bash
 npm install express-graphql graphql
 ```
 
-### Basic GraphQL Example
+### Temel GraphQL Örneği
 
 ```js
 import { pager } from "express-speed";
@@ -199,9 +199,9 @@ export default pager
   .build();
 ```
 
-### GraphQLObjectType Schema Example
+### GraphQLObjectType Schema Örneği
 
-`express-speed` also supports the classic GraphQL schema structure.
+`express-speed` ayrıca klasik GraphQL schema yapısını da destekler.
 
 ```js
 import { pager } from "express-speed";
@@ -248,9 +248,9 @@ export default pager
 
 ---
 
-## Router Style Usage
+## Router Tarzı Kullanım
 
-Pager can be used like a mini router.
+Pager küçük bir router gibi kullanılabilir.
 
 ```js
 import { pager } from "express-speed";
@@ -271,14 +271,14 @@ export default pager
 
 ---
 
-## Features
+## Özellikler
 
-- Chainable route API
-- Express middleware compatibility
-- Role based access control
-- Multiple route handlers
-- Sub path routing
-- GraphQL integration
-- API and page route support
+- Zincirleme (chainable) route API
+- Express middleware uyumu
+- Rol tabanlı erişim kontrolü
+- Birden fazla route handler desteği
+- Alt yol (sub path) routing
+- GraphQL entegrasyonu
+- API ve sayfa route desteği
 
 ---
