@@ -66,7 +66,7 @@ This pattern works in line with Express middleware logic.
 
 ## Sub Path Routes
 
-Use `get(path, handler)` to create different endpoints within the same pager.
+Use `get(path, handler)` to create different endpoints within the same pager. Sub paths must be written as full paths.
 
 ```js
 import { pager } from "express-speed";
@@ -78,11 +78,11 @@ export default pager
     res.send("Blog Home");
   })
 
-  .get("/post/:id", (req, res) => {
+  .get("/blog/post/:id", (req, res) => {
     res.send(`Post ${req.params.id}`);
   })
 
-  .get("/latest", (req, res) => {
+  .get("/blog/latest", (req, res) => {
     res.send("Latest posts");
   })
 

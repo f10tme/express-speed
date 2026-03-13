@@ -66,7 +66,7 @@ Bu yapı Express middleware mantığıyla çalışır.
 
 ## Alt Yol Route'ları
 
-`get(path, handler)` kullanarak aynı pager içinde farklı endpointler oluşturabilirsin.
+`get(path, handler)` kullanarak aynı pager içinde farklı endpointler oluşturabilirsin. Alt yollar tam path olarak yazılmalıdır.
 
 ```js
 import { pager } from "express-speed";
@@ -78,11 +78,11 @@ export default pager
     res.send("Blog Home");
   })
 
-  .get("/post/:id", (req, res) => {
+  .get("/blog/post/:id", (req, res) => {
     res.send(`Post ${req.params.id}`);
   })
 
-  .get("/latest", (req, res) => {
+  .get("/blog/latest", (req, res) => {
     res.send("Latest posts");
   })
 
