@@ -102,7 +102,6 @@ let expressSpeed = {
   }) {
     if (typeof config.go == "function") config.go(expressSpeed);
     config.port = port;
-    console.log(typeof config);
     if (typeof config == "object") {
     }
       expressSpeed.config.path.page = {
