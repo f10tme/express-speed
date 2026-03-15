@@ -23,8 +23,6 @@ npm install express-speed
 
 ## Temel Kullanım
 
-Basit bir sayfa oluşturma:
-
 ```js
 import { pager } from "express-speed";
 
@@ -41,7 +39,7 @@ export default page;
 
 ---
 
-## Birden Fazla GET Handler
+## Birden Fazla Handler
 
 Aynı route içinde birden fazla handler tanımlayabilirsin.
 
@@ -60,32 +58,26 @@ export default pager
   .build();
 ```
 
-Bu yapı Express middleware mantığıyla çalışır.
-
 ---
 
 ## Alt Yol Route'ları
 
-`get(path, handler)` kullanarak aynı pager içinde farklı endpointler oluşturabilirsin. Alt yollar tam path olarak yazılmalıdır.
+`get(path, handler)` kullanarak aynı pager içinde farklı endpointler oluşturabilirsin.
 
 ```js
 import { pager } from "express-speed";
 
 export default pager
   .url("/blog")
-
   .get((req, res) => {
     res.send("Blog Home");
   })
-
   .get("/blog/post/:id", (req, res) => {
     res.send(`Post ${req.params.id}`);
   })
-
   .get("/blog/latest", (req, res) => {
     res.send("Latest posts");
   })
-
   .build();
 ```
 
@@ -100,8 +92,6 @@ Oluşan route'lar:
 ---
 
 ## Middleware Kullanımı
-
-Pager içine middleware ekleyebilirsin.
 
 ```js
 import { pager } from "express-speed";
@@ -124,8 +114,6 @@ export default pager
 
 ## Rol Tabanlı Erişim
 
-Role kullanarak sayfaya erişimi sınırlandırabilirsin.
-
 ```js
 import { pager } from "express-speed";
 
@@ -140,37 +128,67 @@ export default pager
 
 ---
 
-## API Endpoint Örneği
-
-Pager, API endpointleri için de kullanılabilir.
+## Router Tarzı Kullanım
 
 ```js
 import { pager } from "express-speed";
 
 export default pager
-  .url("/api/user")
-  .get((req, res) => {
-    res.json({
-      name: "Murat",
-      role: "user",
-    });
+  .url("/api")
+  .get("/users", (req, res) => {
+    res.json(["user1", "user2"]);
+  })
+  .get("/products", (req, res) => {
+    res.json(["product1", "product2"]);
   })
   .build();
 ```
 
 ---
 
+## expressSpeed.listen
+
+`expressSpeed.listen` sunucuyu başlatır ve tüm sayfaları glob pattern'leriyle otomatik olarak yükler.
+
+```js
+import { expressSpeed } from "express-speed";
+
+expressSpeed.listen(80, {
+  page: {
+    render: ["./page/**/*.js"],
+    exclude: [],
+    nodir: true,
+  },
+  use: [
+    (req, res, next) => {
+      console.log("istek alındı");
+      next();
+    },
+  ],
+  settings: {
+    "view engine": "pug",
+    views: "./pug",
+  },
+});
+```
+
+### Seçenekler
+
+| Alan | Tip | Açıklama |
+|------|-----|----------|
+| `page.render` | `string[]` | Sayfa dosyalarını eşleştirmek için glob pattern'leri |
+| `page.exclude` | `string[]` | Hariç tutulacak glob pattern'leri |
+| `page.nodir` | `boolean` | Klasörleri atla |
+| `use` | `function[]` | Tüm route'lara uygulanan global middleware |
+| `settings` | `object` | Express app ayarları (`view engine`, `views` vb.) |
+
+---
+
 ## GraphQL Entegrasyonu
-
-`express-speed`, GraphQL endpointlerini de destekler.
-
-Bunun için projende şu paketler kurulu olmalıdır:
 
 ```bash
 npm install express-graphql graphql
 ```
-
-### Temel GraphQL Örneği
 
 ```js
 import { pager } from "express-speed";
@@ -199,76 +217,6 @@ export default pager
   .build();
 ```
 
-### GraphQLObjectType Schema Örneği
-
-`express-speed` ayrıca klasik GraphQL schema yapısını da destekler.
-
-```js
-import { pager } from "express-speed";
-import { graphqlHTTP } from "express-graphql";
-import { GraphQLObjectType, GraphQLString, GraphQLSchema } from "graphql";
-
-const UserType = new GraphQLObjectType({
-  name: "User",
-  fields: {
-    name: { type: GraphQLString },
-    surname: { type: GraphQLString },
-  },
-});
-
-const RootQuery = new GraphQLObjectType({
-  name: "RootQueryType",
-  fields: {
-    user: {
-      type: UserType,
-      resolve() {
-        return {
-          name: "Ali",
-          surname: "Yılmaz",
-        };
-      },
-    },
-  },
-});
-
-const schema = new GraphQLSchema({
-  query: RootQuery,
-});
-
-export default pager
-  .url("/graphql")
-  .use(
-    graphqlHTTP({
-      schema: schema,
-      graphiql: true,
-    }),
-  )
-  .build();
-```
-
----
-
-## Router Tarzı Kullanım
-
-Pager küçük bir router gibi kullanılabilir.
-
-```js
-import { pager } from "express-speed";
-
-export default pager
-  .url("/api")
-
-  .get("/users", (req, res) => {
-    res.json(["user1", "user2"]);
-  })
-
-  .get("/products", (req, res) => {
-    res.json(["product1", "product2"]);
-  })
-
-  .build();
-```
-
 ---
 
 ## Özellikler
@@ -278,7 +226,6 @@ export default pager
 - Rol tabanlı erişim kontrolü
 - Birden fazla route handler desteği
 - Alt yol (sub path) routing
+- `listen` üzerinden global middleware ve ayar desteği
 - GraphQL entegrasyonu
 - API ve sayfa route desteği
-
----
