@@ -1,7 +1,6 @@
 // * ExpressSpeed mvc yapısına uygun daha hızlı şekilde kullanılabilir formatta
 // * Sayfalara özel Rol kontrol özelliği
 // * Graphql Uyumlu
-
 import express from "express";
 import { globSync } from "glob";
 import pager from "./pager.js";
@@ -19,12 +18,6 @@ let expressSpeed = {
     },
     use: [],
     settings: {},
-  },
-  trigger: {
-    start: {
-    },
-    end: {
-    }
   },
   complier: {
     pagesMap(renderPathArrayValue, pageExcludeArrayValue, nodirBooleanValue) {
@@ -56,31 +49,8 @@ let expressSpeed = {
       const app = expressSpeed.app;
       for (const router of pageObjectValue.methods) {
         let parameters = ("string" == typeof router.parameters[0]) ? [...router.parameters] : [router.url, ...router.parameters];
-        switch (router.method.toString().toLowerCase()) {
-          case "use":
-            app.use(...parameters);
-            break;
-          case "all":
-            app.all(...parameters);
-            break;
-          case "param":
-            app.param(...parameters);
-            break;
-          case "get":
-            app.get(...parameters);
-            break;
-          case "post":
-            app.post(...parameters);
-            break;
-          case "put":
-            app.put(...parameters);
-            break;
-          case "delete":
-            app.delete(...parameters);
-            break;
-
-          default:
-            break;
+        if (app[router.method.toString().toLowerCase()]) {
+          app[router.method.toString().toLowerCase()](...parameters)
         }
       }
     },
@@ -102,8 +72,6 @@ let expressSpeed = {
   }) {
     if (typeof config.go == "function") config.go(expressSpeed);
     config.port = port;
-    if (typeof config == "object") {
-    }
       expressSpeed.config.path.page = {
         ...expressSpeed.config.path.page,
         ...config.page
@@ -116,6 +84,7 @@ let expressSpeed = {
     expressSpeed.app.listen(expressSpeed.config.port);
   },
 }
+
 
 expressSpeed.pager = pager;
 

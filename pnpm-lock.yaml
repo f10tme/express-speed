@@ -11,9 +11,6 @@ importers:
       express:
         specifier: ^4.22.1
         version: 4.22.1
-      express-speed:
-        specifier: ^2.0.0
-        version: 2.0.0
       fs-extra:
         specifier: ^11.3.3
         version: 11.3.4
@@ -156,9 +153,6 @@ packages:
   etag@1.8.1:
     resolution: {integrity: sha512-aIL5Fx7mawVa300al2BnEE4iNvo1qETxLrPI/o05L7z6go7fCw1J6EQmbK4FmJ2AS7kgVF/KEZWufBfdClMcPg==}
     engines: {node: '>= 0.6'}
-
-  express-speed@2.0.0:
-    resolution: {integrity: sha512-9ARyoblbwKCRorxDSsNc6U6oON8RXmHJjoO2XQcK6Go5ehHWms90EPObcz9Gfcd/+bNssDhiMHQUfp3XC8k25w==}
 
   express@4.22.1:
     resolution: {integrity: sha512-F2X8g9P1X7uCPZMA3MVf9wcTqlyNp7IhH5qPCI0izhaOIYXaW9L535tGA3qmjRzpH+bZczqq7hVKxTR4NWnu+g==}
@@ -559,14 +553,6 @@ snapshots:
   escape-html@1.0.3: {}
 
   etag@1.8.1: {}
-
-  express-speed@2.0.0:
-    dependencies:
-      express: 4.22.1
-      fs-extra: 11.3.4
-      glob: 10.5.0
-    transitivePeerDependencies:
-      - supports-color
 
   express@4.22.1:
     dependencies:

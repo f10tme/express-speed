@@ -1,4 +1,11 @@
-// * Sayfa yapısını oluşturan obje haline getiren zincir fonksiyonlar
+const HTTP_METHODS = [
+    "use", "param", "all",
+    "get", "post", "put", "delete", "patch", "head", "options",
+    "checkout", "copy", "lock", "merge", "mkactivity",
+    "mkcol", "move", "notify", "propfind", "proppatch",
+    "purge", "report", "search", "subscribe", "trace",
+    "unlock", "unsubscribe"
+];
 
 const pager = {
     _id: 0,
@@ -7,17 +14,6 @@ const pager = {
         role: null,
         usings: null,
         methods: [],
-        // method: {
-        //     use: null,
-        //     all: null,
-        //     param: null,
-        //     get: null,
-        //     post: null,
-        //     put: null,
-        //     delete: null,
-        // },
-        render: null,
-        renderConfig: null,
     },
     url(urlStringValue) {
         pager._config.url = urlStringValue;
@@ -31,74 +27,6 @@ const pager = {
         pager._config.usings = usingsArrayValue;
         return pager;
     },
-    use(...useVariableValue) {
-        pager._config.methods.push({
-            url: pager._config.url,
-            method: "use",
-            parameters: [...useVariableValue],
-        });
-        // ? delete pager.url;
-        return pager;
-    },
-    param(...paramVariableValue) {
-        pager._config.methods.push({
-            url: pager._config.url,
-            method: "param",
-            parameters: [...paramVariableValue],
-        });
-        // ? delete pager.url;
-        return pager;
-    },
-    all(...allFunctionValue) {
-        pager._config.methods.push({
-            url: pager._config.url,
-            method: "all",
-            parameters: [...allFunctionValue],
-        });
-        // ? delete pager.url;
-        return pager;
-    },
-    get(...getFunctionValue) {
-        pager._config.methods.push({
-            url: pager._config.url,
-            method: "get",
-            parameters: [...getFunctionValue],
-        });
-        // ? delete pager.url;
-        return pager;
-    },
-    post(...postFunctionValue) {
-        pager._config.methods.push({
-            url: pager._config.url,
-            method: "post",
-            parameters: [...postFunctionValue],
-        });
-        // ? delete pager.url;
-        return pager;
-    },
-    put(...putFunctionValue) {
-        pager._config.methods.push({
-            url: pager._config.url,
-            method: "put",
-            parameters: [...putFunctionValue],
-        });
-        // ? delete pager.url;
-        return pager;
-    },
-    delete(...deleteFunctionValue) {
-        pager._config.methods.push({
-            url: pager._config.url,
-            method: "delete",
-            parameters: [...deleteFunctionValue],
-        });
-        // ? delete pager.url;
-        return pager;
-    },
-    // render(renderStringValue, renderObjectConfiguration = {}) {
-    //     pager._config.render = renderStringValue;
-    //     pager._config.renderConfig = renderObjectConfiguration;
-    //     return pager;
-    // },
     build() {
         const data = { ...pager._config }
         pager._config = {
@@ -107,20 +35,20 @@ const pager = {
             usings: [],
             settings: [],
             methods: [],
-            // method: {
-            //     use: null,
-            //     all: null,
-            //     param: null,
-            //     get: null,
-            //     post: null,
-            //     put: null,
-            //     delete: null,
-            // },
-            render: null,
-            renderConfig: null,
         };
         return data;
     },
-}
+};
+
+HTTP_METHODS.forEach(method => {
+    pager[method] = (...args) => {
+        pager._config.methods.push({
+            url: pager._config.url,
+            method,
+            parameters: [...args],
+        });
+        return pager;
+    };
+});
 
 export default pager;
