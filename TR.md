@@ -1,15 +1,15 @@
 # express-speed
 
-`express-speed`, Express uygulamalarında route oluşturmayı daha düzenli ve zincirleme (chainable) hale getiren basit bir pager sistemidir.
+`express-speed`, Express uygulamalarında rota oluşturmayı daha düzenli ve zincirlenebilir hale getiren hafif bir sayfa yönetim sistemidir.
 
-> 🇬🇧 For English documentation, see [README.md](./README.md).
+> 🇬🇧 For English documentation see [README.md](./README.md).
 
-## Amaç
+## Hedefler
 
-- Route tanımlamayı sadeleştirmek
+- Rota tanımlamalarını basitleştirmek
 - Sayfaları modüler hale getirmek
-- Middleware ve rol kontrolünü kolaylaştırmak
-- API ve sayfa route'larını aynı yapı içinde yönetmek
+- Middleware ve rol tabanlı erişim kontrolünü kolaylaştırmak
+- API ve sayfa rotalarını aynı yapı içinde yönetmek
 
 ---
 
@@ -21,134 +21,7 @@ npm install express-speed
 
 ---
 
-## Temel Kullanım
-
-```js
-import { pager } from "express-speed";
-
-let page = pager
-  .url("/")
-  .role("user")
-  .get((req, res) => {
-    res.send("Simple Page");
-  })
-  .build();
-
-export default page;
-```
-
----
-
-## Birden Fazla Handler
-
-Aynı route içinde birden fazla handler tanımlayabilirsin.
-
-```js
-import { pager } from "express-speed";
-
-export default pager
-  .url("/example")
-  .get((req, res, next) => {
-    console.log("first handler");
-    next();
-  })
-  .get((req, res) => {
-    res.send("final response");
-  })
-  .build();
-```
-
----
-
-## Alt Yol Route'ları
-
-`get(path, handler)` kullanarak aynı pager içinde farklı endpointler oluşturabilirsin.
-
-```js
-import { pager } from "express-speed";
-
-export default pager
-  .url("/blog")
-  .get((req, res) => {
-    res.send("Blog Home");
-  })
-  .get("/blog/post/:id", (req, res) => {
-    res.send(`Post ${req.params.id}`);
-  })
-  .get("/blog/latest", (req, res) => {
-    res.send("Latest posts");
-  })
-  .build();
-```
-
-Oluşan route'lar:
-
-```
-/blog
-/blog/post/:id
-/blog/latest
-```
-
----
-
-## Middleware Kullanımı
-
-```js
-import { pager } from "express-speed";
-
-function logger(req, res, next) {
-  console.log("page visited");
-  next();
-}
-
-export default pager
-  .url("/profile")
-  .use(logger)
-  .get((req, res) => {
-    res.send("Profile page");
-  })
-  .build();
-```
-
----
-
-## Rol Tabanlı Erişim
-
-```js
-import { pager } from "express-speed";
-
-export default pager
-  .url("/admin")
-  .role("admin")
-  .get((req, res) => {
-    res.send("Admin Panel");
-  })
-  .build();
-```
-
----
-
-## Router Tarzı Kullanım
-
-```js
-import { pager } from "express-speed";
-
-export default pager
-  .url("/api")
-  .get("/users", (req, res) => {
-    res.json(["user1", "user2"]);
-  })
-  .get("/products", (req, res) => {
-    res.json(["product1", "product2"]);
-  })
-  .build();
-```
-
----
-
-## expressSpeed.listen
-
-`expressSpeed.listen` sunucuyu başlatır ve tüm sayfaları glob pattern'leriyle otomatik olarak yükler.
+## Hızlı Başlangıç
 
 ```js
 import { expressSpeed } from "express-speed";
@@ -172,15 +45,132 @@ expressSpeed.listen(80, {
 });
 ```
 
-### Seçenekler
+### `expressSpeed.listen` Seçenekleri
 
-| Alan | Tip | Açıklama |
-|------|-----|----------|
-| `page.render` | `string[]` | Sayfa dosyalarını eşleştirmek için glob pattern'leri |
-| `page.exclude` | `string[]` | Hariç tutulacak glob pattern'leri |
+| Anahtar | Tip | Açıklama |
+|---------|-----|----------|
+| `page.render` | `string[]` | Sayfa dosyalarını eşleştirmek için glob desenleri |
+| `page.exclude` | `string[]` | Hariç tutulacak glob desenleri |
 | `page.nodir` | `boolean` | Klasörleri atla |
-| `use` | `function[]` | Tüm route'lara uygulanan global middleware |
-| `settings` | `object` | Express app ayarları (`view engine`, `views` vb.) |
+| `use` | `function[]` | Tüm rotalara uygulanan global middleware |
+| `settings` | `object` | Express uygulama ayarları (`view engine`, `views`, vb.) |
+
+---
+
+## Kullanım
+
+### Temel Sayfa
+
+```js
+import { pager } from "express-speed";
+
+let page = pager
+  .url("/")
+  .role("user")
+  .get((req, res) => {
+    res.send("Basit Sayfa");
+  })
+  .build();
+
+export default page;
+```
+
+### Çoklu Handler
+
+Aynı rota için birden fazla handler tanımlayabilirsiniz.
+
+```js
+import { pager } from "express-speed";
+
+export default pager
+  .url("/ornek")
+  .get((req, res, next) => {
+    console.log("ilk handler");
+    next();
+  })
+  .get((req, res) => {
+    res.send("son yanıt");
+  })
+  .build();
+```
+
+### Middleware
+
+```js
+import { pager } from "express-speed";
+
+function logger(req, res, next) {
+  console.log("sayfa ziyaret edildi");
+  next();
+}
+
+export default pager
+  .url("/profil")
+  .use(logger)
+  .get((req, res) => {
+    res.send("Profil sayfası");
+  })
+  .build();
+```
+
+### Rol Tabanlı Erişim
+
+```js
+import { pager } from "express-speed";
+
+export default pager
+  .url("/admin")
+  .role("admin")
+  .get((req, res) => {
+    res.send("Admin Paneli");
+  })
+  .build();
+```
+
+### Alt Yol Rotaları
+
+Aynı pager içinde farklı uç noktalar oluşturmak için `get(yol, handler)` kullanın.
+
+```js
+import { pager } from "express-speed";
+
+export default pager
+  .url("/blog")
+  .get((req, res) => {
+    res.send("Blog Ana Sayfa");
+  })
+  .get("/blog/post/:id", (req, res) => {
+    res.send(`Post ${req.params.id}`);
+  })
+  .get("/blog/son", (req, res) => {
+    res.send("Son yazılar");
+  })
+  .build();
+```
+
+Oluşturulan rotalar:
+
+```
+/blog
+/blog/post/:id
+/blog/son
+```
+
+### Router Tarzı Kullanım
+
+```js
+import { pager } from "express-speed";
+
+export default pager
+  .url("/api")
+  .get("/kullanicilar", (req, res) => {
+    res.json(["kullanici1", "kullanici2"]);
+  })
+  .get("/urunler", (req, res) => {
+    res.json(["urun1", "urun2"]);
+  })
+  .build();
+```
 
 ---
 
@@ -197,12 +187,12 @@ import { buildSchema } from "graphql";
 
 const schema = buildSchema(`
   type Query {
-    hello: String
+    merhaba: String
   }
 `);
 
 const root = {
-  hello: () => "Hello GraphQL",
+  merhaba: () => "Merhaba GraphQL",
 };
 
 export default pager
@@ -221,11 +211,11 @@ export default pager
 
 ## Özellikler
 
-- Zincirleme (chainable) route API
-- Express middleware uyumu
+- Zincirlenebilir rota API'si
+- Express middleware uyumluluğu
 - Rol tabanlı erişim kontrolü
-- Birden fazla route handler desteği
-- Alt yol (sub path) routing
-- `listen` üzerinden global middleware ve ayar desteği
+- Çoklu rota handler desteği
+- Alt yol yönlendirme
+- `listen` üzerinden global middleware ve ayarlar
 - GraphQL entegrasyonu
-- API ve sayfa route desteği
+- API ve sayfa rota desteği

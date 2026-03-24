@@ -50,12 +50,15 @@ let expressSpeed = {
       for (const router of pageObjectValue.methods) {
         let parameters = ("string" == typeof router.parameters[0]) ? [...router.parameters] : [router.url, ...router.parameters];
         if (app[router.method.toString().toLowerCase()]) {
-          app[router.method.toString().toLowerCase()](...parameters)
+          app[router.method.toString().toLowerCase()](...parameters);
         }
       }
     },
     async load() {
-      for (const useValue of expressSpeed.config.use) expressSpeed.app.use(useValue);
+      for (const useValue of expressSpeed.config.use) {
+        if (Array.isArray(useValue)) expressSpeed.app.use(...useValue);
+        else expressSpeed.app.use(useValue);
+      }
       for (let [setKey, setValue] of Object.entries(expressSpeed.config.settings)) expressSpeed.app.set(setKey, setValue);
       let pagesMap = expressSpeed.complier.pagesMap(expressSpeed.config.path.page.render, expressSpeed.config.path.page.exclude);
       let pages = await expressSpeed.complier.pagesImport(pagesMap);
@@ -72,13 +75,13 @@ let expressSpeed = {
   }) {
     if (typeof config.go == "function") config.go(expressSpeed);
     config.port = port;
-      expressSpeed.config.path.page = {
-        ...expressSpeed.config.path.page,
-        ...config.page
-      } || {};
-      expressSpeed.config.port = config.port || 80;
-      expressSpeed.config.use = config.use || [];
-      expressSpeed.config.settings = config.settings || {};
+    expressSpeed.config.path.page = {
+      ...expressSpeed.config.path.page,
+      ...config.page
+    } || {};
+    expressSpeed.config.port = config.port || 80;
+    expressSpeed.config.use = config.use || [];
+    expressSpeed.config.settings = config.settings || {};
 
     expressSpeed.complier.load();
     expressSpeed.app.listen(expressSpeed.config.port);

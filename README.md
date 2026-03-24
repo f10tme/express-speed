@@ -21,7 +21,45 @@ npm install express-speed
 
 ---
 
-## Basic Usage
+## Quick Start
+
+```js
+import { expressSpeed } from "express-speed";
+
+expressSpeed.listen(80, {
+  page: {
+    render: ["./page/**/*.js"],
+    exclude: [],
+    nodir: true,
+  },
+  use: [
+    (req, res, next) => {
+      console.log("request received");
+      next();
+    },
+  ],
+  settings: {
+    "view engine": "pug",
+    views: "./pug",
+  },
+});
+```
+
+### `expressSpeed.listen` Options
+
+| Key | Type | Description |
+|-----|------|-------------|
+| `page.render` | `string[]` | Glob patterns to match page files |
+| `page.exclude` | `string[]` | Glob patterns to exclude |
+| `page.nodir` | `boolean` | Skip directories |
+| `use` | `function[]` | Global middleware applied to all routes |
+| `settings` | `object` | Express app settings (`view engine`, `views`, etc.) |
+
+---
+
+## Usage
+
+### Basic Page
 
 ```js
 import { pager } from "express-speed";
@@ -37,9 +75,7 @@ let page = pager
 export default page;
 ```
 
----
-
-## Multiple Handlers
+### Multiple Handlers
 
 You can define multiple handlers for the same route.
 
@@ -58,9 +94,40 @@ export default pager
   .build();
 ```
 
----
+### Middleware
 
-## Sub Path Routes
+```js
+import { pager } from "express-speed";
+
+function logger(req, res, next) {
+  console.log("page visited");
+  next();
+}
+
+export default pager
+  .url("/profile")
+  .use(logger)
+  .get((req, res) => {
+    res.send("Profile page");
+  })
+  .build();
+```
+
+### Role Based Access
+
+```js
+import { pager } from "express-speed";
+
+export default pager
+  .url("/admin")
+  .role("admin")
+  .get((req, res) => {
+    res.send("Admin Panel");
+  })
+  .build();
+```
+
+### Sub Path Routes
 
 Use `get(path, handler)` to create different endpoints within the same pager.
 
@@ -89,46 +156,7 @@ Generated routes:
 /blog/latest
 ```
 
----
-
-## Middleware Usage
-
-```js
-import { pager } from "express-speed";
-
-function logger(req, res, next) {
-  console.log("page visited");
-  next();
-}
-
-export default pager
-  .url("/profile")
-  .use(logger)
-  .get((req, res) => {
-    res.send("Profile page");
-  })
-  .build();
-```
-
----
-
-## Role Based Access
-
-```js
-import { pager } from "express-speed";
-
-export default pager
-  .url("/admin")
-  .role("admin")
-  .get((req, res) => {
-    res.send("Admin Panel");
-  })
-  .build();
-```
-
----
-
-## Router Style Usage
+### Router Style
 
 ```js
 import { pager } from "express-speed";
@@ -143,44 +171,6 @@ export default pager
   })
   .build();
 ```
-
----
-
-## expressSpeed.listen
-
-`expressSpeed.listen` starts the server and loads all pages automatically using glob patterns.
-
-```js
-import { expressSpeed } from "express-speed";
-
-expressSpeed.listen(80, {
-  page: {
-    render: ["./page/**/*.js"],
-    exclude: [],
-    nodir: true,
-  },
-  use: [
-    (req, res, next) => {
-      console.log("request received");
-      next();
-    },
-  ],
-  settings: {
-    "view engine": "pug",
-    views: "./pug",
-  },
-});
-```
-
-### Options
-
-| Key | Type | Description |
-|-----|------|-------------|
-| `page.render` | `string[]` | Glob patterns to match page files |
-| `page.exclude` | `string[]` | Glob patterns to exclude |
-| `page.nodir` | `boolean` | Skip directories |
-| `use` | `function[]` | Global middleware applied to all routes |
-| `settings` | `object` | Express app settings (`view engine`, `views`, etc.) |
 
 ---
 
