@@ -48,7 +48,12 @@ let expressSpeed = {
       }
       const app = expressSpeed.app;
       for (const router of pageObjectValue.methods) {
-        let parameters = ("string" == typeof router.parameters[0]) ? [...router.parameters] : [router.url, ...router.parameters];
+        let parameters;
+        if ("string" == typeof router.parameters[0] || !router.url) {
+          parameters = [...router.parameters];
+        } else {
+          parameters = [router.url, ...router.parameters];
+        }
         if (app[router.method.toString().toLowerCase()]) {
           app[router.method.toString().toLowerCase()](...parameters);
         }
