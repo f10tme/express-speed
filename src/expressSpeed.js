@@ -78,7 +78,6 @@ let expressSpeed = {
     settings: {},
     go: null,
   }) {
-    if (typeof config.go == "function") config.go(expressSpeed);
     config.port = port;
     expressSpeed.config.path.page = {
       ...expressSpeed.config.path.page,
@@ -87,9 +86,11 @@ let expressSpeed = {
     expressSpeed.config.port = config.port || 80;
     expressSpeed.config.use = config.use || [];
     expressSpeed.config.settings = config.settings || {};
-
+    
     expressSpeed.complier.load();
     expressSpeed.app.listen(expressSpeed.config.port);
+    
+    if (typeof config.go == "function") config.go(expressSpeed);
   },
 }
 
