@@ -9,6 +9,7 @@ let expressSpeed = {
   app: express(),
   config: {
     port: 80,
+    finalRoutes: [],
     path: {
       page: {
         render: [],
@@ -67,6 +68,7 @@ let expressSpeed = {
       for (let [setKey, setValue] of Object.entries(expressSpeed.config.settings)) expressSpeed.app.set(setKey, setValue);
       let pagesMap = expressSpeed.complier.pagesMap(expressSpeed.config.path.page.render, expressSpeed.config.path.page.exclude);
       let pages = await expressSpeed.complier.pagesImport(pagesMap);
+      pages = [...pages, ...expressSpeed.config.finalRoutes];
       for (let page of pages) expressSpeed.complier.pageRender(page);
     }
   },
@@ -76,6 +78,7 @@ let expressSpeed = {
     use: [],
     usings: [],
     settings: {},
+    finalRoutes:[],
     go: null,
   }) {
     config.port = port;
@@ -86,10 +89,11 @@ let expressSpeed = {
     expressSpeed.config.port = config.port || 80;
     expressSpeed.config.use = config.use || [];
     expressSpeed.config.settings = config.settings || {};
-    
+    expressSpeed.config.finalRoutes = config.finalRoutes || [];
+
     expressSpeed.complier.load();
     expressSpeed.app.listen(expressSpeed.config.port);
-    
+
     if (typeof config.go == "function") config.go(expressSpeed);
   },
 }

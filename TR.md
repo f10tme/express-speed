@@ -24,7 +24,7 @@ npm install express-speed
 ## Hızlı Başlangıç
 
 ```js
-import { expressSpeed } from "express-speed";
+import { expressSpeed, pager } from "express-speed";
 
 expressSpeed.listen(80, {
   page: {
@@ -32,6 +32,9 @@ expressSpeed.listen(80, {
     exclude: [],
     nodir: true,
   },
+  finalRoutes: [
+    pager.use((req, res) => res.status(404).send("404 | Page Not Found!")),
+  ],
   use: [
     (req, res, next) => {
       console.log("istek alındı");
@@ -47,13 +50,13 @@ expressSpeed.listen(80, {
 
 ### `expressSpeed.listen` Seçenekleri
 
-| Anahtar | Tip | Açıklama |
-|---------|-----|----------|
-| `page.render` | `string[]` | Sayfa dosyalarını eşleştirmek için glob desenleri |
-| `page.exclude` | `string[]` | Hariç tutulacak glob desenleri |
-| `page.nodir` | `boolean` | Klasörleri atla |
-| `use` | `function[]` | Tüm rotalara uygulanan global middleware |
-| `settings` | `object` | Express uygulama ayarları (`view engine`, `views`, vb.) |
+| Anahtar        | Tip          | Açıklama                                                |
+| -------------- | ------------ | ------------------------------------------------------- |
+| `page.render`  | `string[]`   | Sayfa dosyalarını eşleştirmek için glob desenleri       |
+| `page.exclude` | `string[]`   | Hariç tutulacak glob desenleri                          |
+| `page.nodir`   | `boolean`    | Klasörleri atla                                         |
+| `use`          | `function[]` | Tüm rotalara uygulanan global middleware                |
+| `settings`     | `object`     | Express uygulama ayarları (`view engine`, `views`, vb.) |
 
 ---
 
